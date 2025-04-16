@@ -80,6 +80,10 @@ class UARTPortIO(val c: UARTParams) extends Bundle {
 class UARTInterrupts extends Bundle {
   val rxwm = Bool()
   val txwm = Bool()
+
+  //DSP'25 DMA Integration
+  val tx_ready = Output(Bool())
+  val rx_valid = Output(Bool())
 }
 
 //abstract class UART(busWidthBytes: Int, val c: UARTParams, divisorInit: Int = 0)
@@ -182,6 +186,10 @@ class UART(busWidthBytes: Int, val c: UARTParams, divisorInit: Int = 0)
     errorparity := rxm.io.errorparity.get || errorparity
     interrupts(1) := errorparity && errie
   }
+
+  // DSP'25 DMA Integration
+  port.tx_ready := (txq.io.count < txwm)
+  port.rx_valid := (rxq.io.count > rxwm)
 
   val ie = RegInit(0.U.asTypeOf(new UARTInterrupts()))
   val ip = Wire(new UARTInterrupts)
