@@ -75,15 +75,15 @@ class UARTPortIO(val c: UARTParams) extends Bundle {
   val rxd = Input(Bool())
   val cts_n = c.includeFourWire.option(Input(Bool()))
   val rts_n = c.includeFourWire.option(Output(Bool()))
+
+  //DSP'25 DMA Integration
+  val tx_ready = Output(Bool())
+  val rx_valid = Output(Bool())
 }
 
 class UARTInterrupts extends Bundle {
   val rxwm = Bool()
   val txwm = Bool()
-
-  //DSP'25 DMA Integration
-  val tx_ready = Output(Bool())
-  val rx_valid = Output(Bool())
 }
 
 //abstract class UART(busWidthBytes: Int, val c: UARTParams, divisorInit: Int = 0)
